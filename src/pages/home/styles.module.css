@@ -1,0 +1,10 @@
+.hideScrollBar {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.userContainer {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}

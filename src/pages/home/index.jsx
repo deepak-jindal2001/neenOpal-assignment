@@ -1,65 +1,73 @@
 import { DATA } from "../../data";
 
-import Card from "../../components/Card";
+import Card from "../../components/card";
 import { useState } from "react";
-import Modal from "../../components/Modal";
+import Modal from "../../components/modal";
+
+import classes from "./styles.module.css";
 
 const HomePage = () => {
   const [users, setUsers] = useState(DATA);
   const [openModal, setOpenModal] = useState(false);
-  const [editUserDetail, setEditUserDetail] = useState({});
-  let details;
-  const deleteHandler = (id) => {
-    setUsers((prev) => prev.filter((user) => user.id !== id));
-  };
-  const likeHandler = (id) => {
-    const userIndex = users.findIndex((user) => user.id === id);
+  const [selectedUser, setSelectedUser] = useState({});
+
+  const findUserIndex = (userId) => {
+    const userIndex = users.findIndex((user) => user.id === userId);
     if (userIndex === -1) {
-      return;
+      return -1;
     }
-    users[userIndex].liked = !users[userIndex].liked;
-    setUsers([...users]);
+    return userIndex;
   };
-  const EditUserHandler = (id) => {
-    const userIndex = users.findIndex((user) => user.id === id);
-    if (userIndex === -1) {
-      return;
+
+  const likeHandler = (userId) => {
+    const userIndex = findUserIndex(userId);
+    if (userIndex !== -1) {
+      users[userIndex].liked = !users[userIndex].liked;
+      setUsers([...users]);
     }
-    setEditUserDetail(users[userIndex]);
-    setOpenModal(true);
   };
+
+  const editUserHandler = (userId) => {
+    const userIndex = findUserIndex(userId);
+    if (userIndex !== -1) {
+      setSelectedUser({ ...users[userIndex] });
+      setOpenModal(true);
+    }
+  };
+
+  const onConfirm = (userId, updatedUser) => {
+    const userIndex = findUserIndex(userId);
+    if (userIndex !== -1) {
+      users[userIndex] = updatedUser;
+      setUsers([...users]);
+    }
+  };
+
+  const deleteHandler = (userId) => {
+    setUsers((prev) => prev.filter((user) => user.id !== userId));
+  };
+
   const closeModalHandler = () => {
     setOpenModal(false);
   };
 
-  const onConfirmEdit = (id, updatedUser) => {
-    console.log({ id, updatedUser });
-    const userIndex = users.findIndex((user) => user.id === id);
-    if (userIndex === -1) {
-      return;
-    }
-    users[userIndex] = updatedUser;
-    setUsers([...users]);
-  };
-  const hideScrollBar = { height: "100vh", overflow: "hidden" };
-
   return (
-    <div style={openModal ? hideScrollBar : {}}>
+    <div className={openModal ? classes.hideScrollBar : ""}>
       {openModal && (
         <Modal
           onClose={closeModalHandler}
-          userDetail={editUserDetail}
-          onConfirm={onConfirmEdit}
+          userDetail={selectedUser}
+          onConfirm={onConfirm}
         />
       )}
-      <div style={{ display: "flex", flexWrap: "wrap", flexDirection: "row" }}>
-        {users.map((user, index) => (
+      <div className={classes.userContainer}>
+        {users.map((user) => (
           <Card
-            key={index}
-            userDetail={user}
+            key={user.id}
+            user={user}
             onDelete={deleteHandler}
             onlike={likeHandler}
-            onEditUser={EditUserHandler}
+            onEdit={editUserHandler}
           />
         ))}
       </div>

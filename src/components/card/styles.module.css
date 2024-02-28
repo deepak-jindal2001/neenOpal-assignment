@@ -16,44 +16,23 @@
   background-color: #f5f5f5;
   align-items: center;
   justify-content: center;
+
+  img {
+    width: 200px;
+    height: 200px;
+  }
 }
 
-.userDetail {
+.contentWrapper {
   padding: 24px;
 }
 
-.userItem {
+.contentItem {
   display: flex;
 }
 
-.userItem p {
+.contentItem p {
   margin: 0 0 5px 10px;
-}
-
-.actionBar {
-  display: flex;
-  background: #fafafa;
-  border-top: 1px solid #e8e8e8;
-}
-
-.actionButton {
-  flex-grow: 1;
-  flex-basis: 0;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  background: none;
-  border: none;
-  cursor: pointer;
-  outline: none;
-  font-size: 14px;
-  margin: 12px 0;
-  color: rgba(0, 0, 0, 0.45);
-  align-items: center;
-  border-right: 1px solid #e8e8e8;
-  &:hover {
-    color: #1890ff;
-  }
 }
 
 @media screen and (max-width: 1200px) {
